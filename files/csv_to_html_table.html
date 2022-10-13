@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang='en-US'>
+<head>
+ <META charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate HTML Table from Local CSV file</title>
+  <style>
+   table,tr,th,td{
+	  border:1px solid gray;
+   }
+  </style>
+</head>
+<script>
+
+// (A) GET HTML FILE PICKER & TABLE
+let picker = document.getElementById("demoPick");
+//    table = document.getElementById("demoTable");
+ /*
+// (B) ON SELECTING CSV FILE
+picker.onchange = () => {
+  // (B1) REMOVE OLD TABLE ROWS
+  table.innerHTML = "";
+ 
+  // (B2) READ CSV & GENERATE TABLE
+  let reader = new FileReader();
+  reader.addEventListener("loadend", () => {
+    let csv = reader.result.split("\r\n");
+    for (let row of csv) {
+      let tr = table.insertRow();
+      for (let col of row.split(",")) {
+        let td = tr.insertCell();
+        td.innerHTML = col;
+      }
+    }
+  });
+  reader.readAsText(picker.files[0]);
+};
+*/ 
+picker.onchange=()=>{
+  let reader = new FileReader();
+  reader.addEventListener("loadend", () => {
+    csv = reader.result
+	console.log(csv)
+createTable(csvToArray(csv))
+})
+  reader.readAsText(picker.files[0]);
+}
+//* 
+/*
+picker.onchange = () => {
+  // (B1) REMOVE OLD TABLE ROWS
+  table.innerHTML = "";
+ 
+  // (B2) READ CSV & GENERATE TABLE
+  let reader = new FileReader();
+  reader.addEventListener("loadend", () => {
+    let cs = reader.result;
+	console.log(cs)
+	csv=cs.split("\r\n");
+    for (let row of csv) {
+      let tr = table.insertRow();
+      for (let col of row.split(",")) {
+        let td = tr.insertCell();
+        td.innerHTML = col;
+      }
+    }
+  });
+  reader.readAsText(picker.files[0]);
+};
+*/
+function csvToArray(text) {
+    let p = '', row = [''], ret = [row], i = 0, r = 0, s = !0, l;
+    for (l of text) {
+        if ('"' === l) {
+            if (s && l === p) row[i] += l;
+            s = !s;
+        } else if (',' === l && s) l = row[++i] = '';
+        else if ('\n' === l && s) {
+            if ('\r' === p) row[i] = row[i].slice(0, -1);
+            row = ret[++r] = [l = '']; i = 0;
+        } else row[i] += l;
+        p = l;
+    }
+	console.log(ret)
+    return ret;
+};
+function createTable(tableData) {
+  var table = document.createElement('table');
+  var header = document.createElement("tr");
+  // get first row to be header
+  var headers = tableData[0];
+
+  // create table header
+  headers.forEach(function(rowHeader){
+    var th = document.createElement("th");
+    th.appendChild(document.createTextNode(rowHeader));
+    header.appendChild(th);
+  });      
+  console.log(headers);
+
+  // insert table header 
+  table.append(header);
+  var row = {};
+  var cell = {};
+
+  // remove first how - header
+  tableData.shift();
+  tableData.forEach(function(rowData, index) {
+    row = table.insertRow();
+//    console.log("indice: " + index);
+    rowData.forEach(function(cellData) {
+      cell = row.insertCell();
+            cell.textContent = cellData;
+    });
+  });
+  document.body.appendChild(table);
+}
+function createTable2(data) {
+
+  // Destructure the headings (first row) from
+  // all the rows
+  const [headings, ...rows] = data;
+
+  // Return some HTML that uses `getCells` to create
+  // some headings, but also to create the rows
+  // in the tbody.
+  return "<thead>${getCells(headings, 'th')}</thead>      <tbody>${createBody(rows)}</tbody>  ";
+}
+/*
+function csv2arr(str: string) {
+    let line = ["",];
+    const ret = [line,];
+    let quote = false;
+
+    for (let i = 0; i < str.length; i++) {
+        const cur = str[i];
+        const next = str[i + 1];
+
+        if (!quote) {
+            const cellIsEmpty = line[line.length - 1].length === 0;
+            if (cur === '"' && cellIsEmpty) quote = true;
+            else if (cur === ",") line.push("");
+            else if (cur === "\r" && next === "\n") { line = ["",]; ret.push(line); i++; }
+            else if (cur === "\n" || cur === "\r") { line = ["",]; ret.push(line); }
+            else line[line.length - 1] += cur;
+        } else {
+            if (cur === '"' && next === '"') { line[line.length - 1] += cur; i++; }
+            else if (cur === '"') quote = false;
+            else line[line.length - 1] += cur;
+        }
+    }
+    return ret;
+}
+*/
+function arrayToCSV(row) {
+    for (let i in row) {
+        row[i] = row[i].replace(/"/g, '""');
+    }
+    return '"' + row.join('","') + '"';
+}
+/*
+let row = [
+  "one",
+  "two with escaped \" double quote",
+  "three, with, commas",
+  "four with no quotes (now has)",
+  "five for fun"
+];
+let text = arrayToCSV(row);
+console.log(text);
+*/
+ </script>
+</html>
