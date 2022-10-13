@@ -23,4 +23,4 @@
 
 #### Gists
 - [Privacy Redirector strings translated to URLCleaner App for Android](https://gist.github.com/Raj9039852537/d12e73c6314c05bc79e2bdd71a1001bc)
-  > Paste the complete file content in Pattern Checker Section's Advance Editor and voila!!!
+> Paste the complete file content in Pattern Checker Section's Advance Editor and voila!!!
