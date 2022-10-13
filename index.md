@@ -8,7 +8,7 @@
 - Lite version [Shri Jagannath Panchang Lite](https://raj9039852537.github.io/Shri-Jagannath-Panchang/sjpl_lite_v1.01.html)
 
 [Typing Master](https://raj9039852537.github.io/TypingMaster/)
-  > Typing Practice app that lets you paste your own text and displays live typing speed meter on top right.
+ > Typing Practice app that lets you paste your own text and displays live typing speed meter on top right.
 
 ---
 #### HTML apps
@@ -23,4 +23,4 @@
 
 #### Gists
 - [Privacy Redirector strings translated to URLCleaner App for Android](https://gist.github.com/Raj9039852537/d12e73c6314c05bc79e2bdd71a1001bc)
-> Paste the complete file content in Pattern Checker Section's Advance Editor and voila!!!
+ > Paste the complete file content in Pattern Checker Section's Advance Editor and voila!!!
