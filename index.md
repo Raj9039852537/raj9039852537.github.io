@@ -10,6 +10,7 @@
 ---
 #### HTML apps
 - [Generate html table from local csv file](https://raj9039852537.github.io/files/csv_to_html_table.html)
+
 <!--
 ---
 - #### GST related
