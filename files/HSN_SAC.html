@@ -19,13 +19,13 @@ highlight {background:yellow;}
 <div id="topnav">
 <input  type="text"   id="myInput"   onkeyup="filterTable('#myTable','#myInput')"   placeholder="Search for names or countries.."   title="Type in to search">
 <span id="result"></span>
-<a href="#" onclick="download_table_as_csv('myTable');">Download as CSV</a>
+<a href="#" onclick="download_table_as_csv('myTable','\t');">Download as CSV</a>
 </div>
 </body>	
 <script>
 // load from server
-// <input type="file" accept=".csv" id="demoPick"/>
-fetch('HSN_SAC.csv')
+const f1=()=>{
+fetch('HSN_SAC.tsv')
   .then(
     function(response) {
       if (response.status !== 200) {
@@ -36,27 +36,45 @@ fetch('HSN_SAC.csv')
       // Examine the text in the response
       response.text().then(function(data) {
     //    console.log(data);
-		document.body.insertAdjacentHTML('beforeend',createTable2(csvToArray(data)))
+		let t=tsv2array(data,'\t')
+	document.getElementById('result').innerHTML=`${t.length-1} items`;
+		document.body.insertAdjacentHTML('beforeend',createTable2(t))
       });
     }
   )
   .catch(function(err) {
     console.log('Fetch Error :-S', err);
   });
-/*
+ }
+
 // (A) GET HTML FILE PICKER & TABLE
-let picker = document.getElementById("demoPick");
-picker.onchange=()=>{
-  let reader = new FileReader();
-  reader.addEventListener("loadend", () => {
-    csv = reader.result
-	console.log(csv)
-createTable(csvToArray(csv))
-})
-  reader.readAsText(picker.files[0]);
+const f2=()=>{
+	let picker = document.getElementById("demoPick");
+	picker.onchange=()=>{
+	  let reader = new FileReader();
+	  reader.addEventListener("loadend", () => {
+		csv = reader.result
+//		console.log(csv)
+	let t=csvToArray(csv,'\t')
+	document.getElementById('result').innerHTML=`${t.length-1} items`;
+	document.body.insertAdjacentHTML('beforeend',createTable2(t))
+	})
+	  reader.readAsText(picker.files[0]);
+	}
 }
-*/
-function csvToArray(text) {
+switch(window.location.protocol){
+	case "http:" :
+	case "https:" :
+	f1()
+	break;
+	case "file:" :
+document.getElementById('topnav').insertAdjacentHTML('afterbegin','<input type="file" accept=".csv,.tsv" id="demoPick"/>')
+	f2()
+	break;
+}
+// all delimited file that including csv that does not have "," comma inside quotes
+const tsv2array=(data, delim=',',omitFirstRow=false)=>data.slice(omitFirstRow?d.indexOf('\n')+1:0).split('\n').map(v=>v.split(delim));
+function csvToArray(text,sep) {
     let p = '', row = [''], ret = [row], i = 0, r = 0, s = !0, l;
     for (l of text) {
         if ('"' === l) {
@@ -106,23 +124,10 @@ function createTable(tableData) {
   document.body.appendChild(table);
 }
 
-function getCells(data, type) {
-  return data.map(cell => `<${type}>${cell}</${type}>`).join('');
-}
-
-function createBody(data) {
-  return data.map(row => `<tr>${getCells(row, 'td')}</tr>`).join('');
-}
-
-function createTable2(data) {
-
-  // Destructure the headings (first row) from
-  // all the rows
+const getCells=(data, type)=> data.map(cell => `<${type}>${cell}</${type}>`).join('');
+const createBody=(data)=> data.map(row => `<tr>${getCells(row, 'td')}</tr>`).join('');
+const createTable2=(data)=>{
   const [headings, ...rows] = data;
-
-  // Return some HTML that uses `getCells` to create
-  // some headings, but also to create the rows
-  // in the tbody.
   return `
     <table id='myTable'>
       <thead>${getCells(headings, 'th')}</thead>
@@ -130,41 +135,6 @@ function createTable2(data) {
     </table>
   `;
 }
-
-// Bang it altogether
-//document.body.insertAdjacentHTML('beforeend', createTable(data));/*
-/*
-function csv2arr(str: string) {
-    let line = ["",];
-    const ret = [line,];
-    let quote = false;
-    for (let i = 0; i < str.length; i++) {
-        const cur = str[i];
-        const next = str[i + 1];
-        if (!quote) {
-            const cellIsEmpty = line[line.length - 1].length === 0;
-            if (cur === '"' && cellIsEmpty) quote = true;
-            else if (cur === ",") line.push("");
-            else if (cur === "\r" && next === "\n") { line = ["",]; ret.push(line); i++; }
-            else if (cur === "\n" || cur === "\r") { line = ["",]; ret.push(line); }
-            else line[line.length - 1] += cur;
-        } else {
-            if (cur === '"' && next === '"') { line[line.length - 1] += cur; i++; }
-            else if (cur === '"') quote = false;
-            else line[line.length - 1] += cur;
-        }
-    }
-    return ret;
-}
-*/
-function arrayToCSV(row) {
-    for (let i in row) {
-        row[i] = row[i].replace(/"/g, '""');
-    }
-    return '"' + row.join('","') + '"';
-}
-  document.querySelector('#result').innerText=` ${document.querySelectorAll('table tr:not([style*="display: none"]):not(.header)').length} items`
-
 const filterTable = (a,b) => {
   highlighter(a,b,0)
   const trs = document.querySelectorAll(a+' tbody tr')
@@ -185,7 +155,7 @@ const highlighter=(a,b,c)=>{
 const r=new RegExp("<\/*highlight>","gi")
   const t = document.querySelector(a)
   const f = document.querySelector(b).value
-  if (f==='') { 	t.innerHTML=t.innerHTML.replace(r,"");return false}
+  if (f==='') {	t.innerHTML=t.innerHTML.replace(r,"");return false}
   if (c===0){
 	t.innerHTML=t.innerHTML.replace(r,"");
   }else{
@@ -194,29 +164,19 @@ const r=new RegExp("<\/*highlight>","gi")
 }
 
 function download_table_as_csv(table_id, separator = ',') {
-    // Select rows from table_id
-    var rows = document.querySelectorAll('table#' + table_id + ' tr');
-    // Construct csv
-    var csv = [];
-    for (var i = 0; i < rows.length; i++) {
-        var row = [], cols = rows[i].querySelectorAll('td, th');
-        for (var j = 0; j < cols.length; j++) {
-            // Clean innertext to remove multiple spaces and jumpline (break csv)
-            var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
-            // Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
-            data = data.replace(/"/g, '""');
-            // Push escaped string
-            row.push('"' + data + '"');
-        }
-        csv.push(row.join(separator));
-    }
-    var csv_string = csv.join('\n');
+  const tableHeaders = Array.from(document.querySelectorAll('th')).map(item => title = item.innerText.split("\n").filter(str => (str !== 0)).join(" ")).join(separator)
+  const rows = Array.from(document.querySelectorAll('tr')).reduce((arr, currRow) => {
+    if (currRow.querySelector('th')) return arr
+    const cells = Array.from(currRow.querySelectorAll('td')).map(item => item.innerText).join(separator) 
+	return arr.concat([cells])
+  }, [])
+  csv_string= tableHeaders + "\n" + rows.join('\n')
     // Download it
-    var filename = 'export_' + table_id + '_' + new Date().toLocaleDateString() + '.csv';
+    var filename = 'export_' + table_id + '_' + new Date().toLocaleDateString() + '.tsv';
     var link = document.createElement('a');
     link.style.display = 'none';
     link.setAttribute('target', '_blank');
-    link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_string));
+    link.setAttribute('href', 'data:text/tsv;charset=utf-8,' + encodeURIComponent(csv_string));
     link.setAttribute('download', filename);
     document.body.appendChild(link);
     link.click();
