@@ -1,0 +1,46 @@
+||cat3movie.org/files/*.m3u8
+https://www.watchfreeonline.co.uk/
+||https://www.watchmoviee.net
+http://www.watchmoviee.org/
+https://www.moviedown.net/
+http://fatimanc.blog.free.fr/
+||live.primis.tech^
+||minecraft.fandom.com##.top-ads-container
+||*##.*-ads-*
+|https://static.wikia.nocookie.net/fandom-ae-assets/*
+?utm_
+&utm_
+?fbclid=
+&fbclid=
+?fbadid=
+?amp_
+|https://script.wikia.nocookie.net/fandom-ae-assets/platforms/v111.0.1/ucp-mobile/styles.css
+|https://script.wikia.nocookie.net/fandom-ae-assets/tracking-opt-in/v8.2.0/tracking-opt-in.min.js
+||https://desksetup.github.io/
+https://www.youtube.com/embed
+||https://shockbyte.com/
+||https://www.therecipes.info
+|https://consent.cookie-script.com/collect?*
+https://www.minecraft-schematics.com/js/jquery.adblock-detector-1.0.5.js
+||*##.js-consent-banner
+||https://cdn.jsdelivr.net/npm/cookieconsent@3/*
+www.reddit.com##.XPromoPopup__actionButton m-blue
+|https://www.redditstatic.com/mweb2x/chunkCSS/InterstitialXPromoAppSelector.4b9c001f4c4209568894.css
+|https://karvitt.com/ratekit/js/ratekit.v1.js
+www.whois.com##.rhs-col
+|https://www.whois.com/images/chiclet_wph_300.png
+|https://www.whois.com/images/ssmg/domain_box_tag.png
+||*/*.woff2
+||*##.alford
+morty.ononoki.org##.alford
+||*/*.woff
+morty.ononoki.org##.header__nav__menu__item header__nav__menu__item--contact
+morty.ononoki.org##.header__nav__menu__item header__nav__menu__item--blog
+morty.ononoki.org##.header__nav__menu__item header__nav__menu__item--careers
+morty.ononoki.org##.header__nav__menu__item header__nav__menu__item--services
+morty.ononoki.org##.header__nav__menu__item header__nav__menu__item--agency
+morty.ononoki.org##.header__brand
+www.buttersafe.com###logoheader2
+|https://www.gstatic.com/feedback/js/help/prod/service/lazy.min.js
+|https://www.gstatic.com/_/boq-play/*
+|https://play.google.com/_/PlayStoreUi/cspreport
